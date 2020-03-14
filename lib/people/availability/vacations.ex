@@ -1,4 +1,4 @@
-defmodule People.Availability.Vacation do
+defmodule People.Availability.Vacations do
   use Ecto.Schema
   import Ecto.Changeset
 
