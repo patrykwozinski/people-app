@@ -3,9 +3,9 @@ use Mix.Config
 # Configure your database
 config :people, People.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "dp",
   database: "people_test",
-  hostname: "localhost",
+  hostname: "people-db",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,

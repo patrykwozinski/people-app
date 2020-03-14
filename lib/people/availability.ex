@@ -9,19 +9,6 @@ defmodule People.Availability do
   alias People.Availability.Worker
 
   @doc """
-  Returns the list of workers.
-
-  ## Examples
-
-      iex> list_workers()
-      [%Worker{}, ...]
-
-  """
-  def list_workers do
-    Repo.all(Worker)
-  end
-
-  @doc """
   Gets a single worker.
 
   Raises `Ecto.NoResultsError` if the Worker does not exist.
