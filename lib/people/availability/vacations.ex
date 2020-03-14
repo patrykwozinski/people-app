@@ -21,9 +21,4 @@ defmodule People.Availability.Vacations do
     |> cast(attrs, [:worker_id, :is_accepted, :start_at, :end_at])
     |> validate_required([:worker_id, :is_accepted, :start_at, :end_at])
   end
-
-  def assign_worker(vacation, worker) do
-    vacation
-    |>Enum.into(:worker, worker)
-  end
 end
