@@ -2,11 +2,13 @@ defmodule People.Availability.Vacations do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias People.Availability.Worker
+
   schema "vacations" do
     field :is_accepted, :boolean, default: false
     field :end_at, :date
     field :start_at, :date
-    field :worker_id, :id
+    belongs_to :worker, Worker
 
     timestamps()
   end
@@ -14,7 +16,12 @@ defmodule People.Availability.Vacations do
   @doc false
   def changeset(vacation, attrs) do
     vacation
-    |> cast(attrs, [:is_accepted, :start_at, :end_at])
-    |> validate_required([:is_accepted, :start_at, :end_at])
+    |> cast(attrs, [:worker_id, :is_accepted, :start_at, :end_at])
+    |> validate_required([:worker_id, :is_accepted, :start_at, :end_at])
+  end
+
+  def assign_worker(vacation, worker) do
+    vacation
+    |>Enum.into(:worker, worker)
   end
 end

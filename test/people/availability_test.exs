@@ -59,10 +59,21 @@ defmodule People.AvailabilityTest do
 
   describe "vacations" do
     alias People.Availability.Vacations
+    alias People.Availability.Worker
 
     @valid_attrs %{end_at: ~D[2010-04-17], is_accepted: true, start_at: ~D[2010-04-17]}
-    @update_attrs %{end_at: ~D[2011-05-18], is_accepted: false, start_at: ~D[2011-05-18]}
-    @invalid_attrs %{end_at: nil, is_accepted: nil, start_at: nil}
+
+    def random_worker() do
+      {:ok, worker} = Availability.create_worker(%{vacation_days: 42})
+
+      worker
+    end
+
+    def worker_without_vacation_days() do
+      {:ok, worker} = Availability.create_worker(%{vacation_days: 0})
+
+      worker
+    end
 
     # def vacations_fixture(attrs \\ %{}) do
     #   {:ok, vacations} =
@@ -73,8 +84,20 @@ defmodule People.AvailabilityTest do
     #   vacations
     # end
 
-    # test "requested vacations successfully" do
-    #   assert {:ok, %Vacations} = Vacations.request()
-    # end
+    test "requested vacations successfully" do
+      worker = random_worker()
+      attrs = %{worker_id: worker.id}
+      |>Enum.into(@valid_attrs)
+
+      assert {:ok, %Vacations{} = vacations} = Availability.request_vacations(attrs)
+    end
+
+    test "cannot request vacations if no days left" do
+      worker = worker_without_vacation_days()
+      attrs = %{worker_id: worker.id}
+      |>Enum.into(@valid_attrs)
+
+      assert {:error, "no vacation days left"} = Availability.request_vacations(attrs)
+    end
   end
 end

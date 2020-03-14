@@ -91,11 +91,13 @@ defmodule People.Availability do
 
   alias People.Availability.Vacations
 
-  def request_vacations() do
+  def request_vacations(attrs) do
+    worker = Worker
+    |>preload(:vacations)
+    |>Repo.get!(attrs.worker_id)
 
+    %Vacations{}
+    |>Vacations.changeset(attrs)
+    |>Repo.insert()
   end
-
-  # def cancel_vacations(%Vacations{} = vacations) do
-  #   Repo.delete(vacations)
-  # end
 end
