@@ -3,8 +3,8 @@ defmodule People.Availability.Vacation do
   import Ecto.Changeset
 
   schema "vacations" do
-    field :end_at, :date
     field :is_accepted, :boolean, default: false
+    field :end_at, :date
     field :start_at, :date
     field :worker_id, :id
 
