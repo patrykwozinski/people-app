@@ -19,11 +19,6 @@ defmodule People.AvailabilityTest do
       worker
     end
 
-    test "list_workers/0 returns all workers" do
-      worker = worker_fixture()
-      assert Availability.list_workers() == [worker]
-    end
-
     test "get_worker!/1 returns the worker with given id" do
       worker = worker_fixture()
       assert Availability.get_worker!(worker.id) == worker
