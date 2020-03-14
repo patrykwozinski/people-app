@@ -5,8 +5,8 @@ defmodule People.Availability do
 
   import Ecto.Query, warn: false
   alias People.Repo
-
   alias People.Availability.Worker
+  alias People.Availability.Vacations
 
   @doc """
   Gets a single worker.
@@ -88,8 +88,6 @@ defmodule People.Availability do
   def change_worker(%Worker{} = worker) do
     Worker.changeset(worker, %{})
   end
-
-  alias People.Availability.Vacations
 
   def request_vacations(attrs) do
     worker = Worker
