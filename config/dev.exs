@@ -3,9 +3,9 @@ use Mix.Config
 # Configure your database
 config :people, People.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "dp",
   database: "people_dev",
-  hostname: "localhost",
+  hostname: "people-db",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
