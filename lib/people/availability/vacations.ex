@@ -8,8 +8,8 @@ defmodule People.Availability.Vacations do
 
   schema "vacations" do
     field :is_accepted, :boolean, default: false
-    field :end_at, :date
     field :start_at, :date
+    field :end_at, :date
     belongs_to :worker, Worker
 
     timestamps()

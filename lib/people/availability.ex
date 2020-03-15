@@ -94,6 +94,8 @@ defmodule People.Availability do
     |>preload(:vacations)
     |>Repo.get!(attrs.worker_id)
 
+    # sum = Enum.map(worker.vacations(), fn vacation -> Date.diff(vacation.start_at, vacation.end_at))
+
     %Vacations{}
     |>Vacations.changeset(attrs)
     |>Repo.insert()
