@@ -23,7 +23,7 @@ defmodule People.Availability.Worker do
   end
 
   @doc false
-  def can_request?(worker, start_at, end_at) do
+  def can_request_vacations?(worker, start_at, end_at) do
     used_days = worker.vacations()
     |>Enum.map(fn vacation -> Date.diff(vacation.end_at, vacation.start_at) end)
     |>Enum.sum()

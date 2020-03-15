@@ -94,7 +94,7 @@ defmodule People.Availability do
     |>preload(:vacations)
     |>Repo.get!(attrs.worker_id)
 
-    case Worker.can_request?(worker, attrs.start_at, attrs.start_at) do
+    case Worker.can_request_vacations?(worker, attrs.start_at, attrs.start_at) do
       false -> {:error, "no vacation days left"}
       true -> %Vacations{}
         |>Vacations.changeset(attrs)
