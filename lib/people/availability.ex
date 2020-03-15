@@ -5,8 +5,8 @@ defmodule People.Availability do
 
   import Ecto.Query, warn: false
   alias People.Repo
-
   alias People.Availability.Worker
+  alias People.Availability.Vacations
 
   @doc """
   Gets a single worker.
@@ -89,99 +89,22 @@ defmodule People.Availability do
     Worker.changeset(worker, %{})
   end
 
-  alias People.Availability.Vacation
+  def request_vacations(attrs) do
+    worker = Worker
+    |>preload(:vacations)
+    |>Repo.get!(attrs.worker_id)
 
-  @doc """
-  Returns the list of vacations.
+    used_days = worker.vacations()
+    |>Enum.map(fn vacation -> Date.diff(vacation.end_at, vacation.start_at) end)
+    |>Enum.sum()
 
-  ## Examples
+    requested_days = Date.diff(attrs.end_at, attrs.start_at)
 
-      iex> list_vacations()
-      [%Vacation{}, ...]
-
-  """
-  def list_vacations do
-    Repo.all(Vacation)
-  end
-
-  @doc """
-  Gets a single vacation.
-
-  Raises `Ecto.NoResultsError` if the Vacation does not exist.
-
-  ## Examples
-
-      iex> get_vacation!(123)
-      %Vacation{}
-
-      iex> get_vacation!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_vacation!(id), do: Repo.get!(Vacation, id)
-
-  @doc """
-  Creates a vacation.
-
-  ## Examples
-
-      iex> create_vacation(%{field: value})
-      {:ok, %Vacation{}}
-
-      iex> create_vacation(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_vacation(attrs \\ %{}) do
-    %Vacation{}
-    |> Vacation.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a vacation.
-
-  ## Examples
-
-      iex> update_vacation(vacation, %{field: new_value})
-      {:ok, %Vacation{}}
-
-      iex> update_vacation(vacation, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_vacation(%Vacation{} = vacation, attrs) do
-    vacation
-    |> Vacation.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a vacation.
-
-  ## Examples
-
-      iex> delete_vacation(vacation)
-      {:ok, %Vacation{}}
-
-      iex> delete_vacation(vacation)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_vacation(%Vacation{} = vacation) do
-    Repo.delete(vacation)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking vacation changes.
-
-  ## Examples
-
-      iex> change_vacation(vacation)
-      %Ecto.Changeset{source: %Vacation{}}
-
-  """
-  def change_vacation(%Vacation{} = vacation) do
-    Vacation.changeset(vacation, %{})
+    case worker.vacation_days <= used_days + requested_days do
+      true -> {:error, "no vacation days left"}
+      false -> %Vacations{}
+        |>Vacations.changeset(attrs)
+        |>Repo.insert()
+    end
   end
 end

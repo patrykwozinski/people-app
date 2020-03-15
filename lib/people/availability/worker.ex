@@ -1,11 +1,16 @@
 defmodule People.Availability.Worker do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
+
+  alias People.Availability.Vacations
 
   schema "workers" do
     field :vacation_days, :integer
     field :user_id, :id
     field :manager_id, :id
+    has_many :vacations, Vacations
 
     timestamps()
   end
