@@ -98,10 +98,13 @@ defmodule People.Availability do
     |>Enum.map(fn vacation -> Date.diff(vacation.end_at, vacation.start_at) end)
     |>Enum.sum()
 
+    requested_days = Date.diff(attrs.end_at, attrs.start_at)
 
-
-    %Vacations{}
-    |>Vacations.changeset(attrs)
-    |>Repo.insert()
+    case worker.vacation_days <= used_days + requested_days do
+      true -> {:error, "no vacation days left"}
+      false -> %Vacations{}
+        |>Vacations.changeset(attrs)
+        |>Repo.insert()
+    end
   end
 end
