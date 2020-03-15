@@ -21,4 +21,15 @@ defmodule People.Availability.Worker do
     |> cast(attrs, [:vacation_days])
     |> validate_required([:vacation_days])
   end
+
+  @doc false
+  def can_request?(worker, start_at, end_at) do
+    used_days = worker.vacations()
+    |>Enum.map(fn vacation -> Date.diff(vacation.end_at, vacation.start_at) end)
+    |>Enum.sum()
+
+    requested_days = Date.diff(end_at, start_at)
+
+    worker.vacation_days > used_days + requested_days
+  end
 end

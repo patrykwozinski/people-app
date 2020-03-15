@@ -61,15 +61,15 @@ defmodule People.AvailabilityTest do
     alias People.Availability.Vacations
     alias People.Availability.Worker
 
-    @valid_attrs %{end_at: ~D[2010-04-17], is_accepted: true, start_at: ~D[2010-04-17]}
+    @valid_attrs %{end_at: ~D[2010-04-20], start_at: ~D[2010-04-17]}
 
-    def random_worker() do
+    def random_worker do
       {:ok, worker} = Availability.create_worker(%{vacation_days: 42})
 
       worker
     end
 
-    def worker_without_vacation_days() do
+    def worker_without_vacation_days do
       {:ok, worker} = Availability.create_worker(%{vacation_days: 0})
 
       worker
